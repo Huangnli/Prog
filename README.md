@@ -1,2 +1,2 @@
 # prog
-listas
+listas em C
