@@ -1,2 +1,2 @@
 # Prog
-listas em C
+listas e trabalhos em C
