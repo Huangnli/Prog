@@ -200,9 +200,13 @@ void Heap::troca(int i, int j) {
 void Heap::desce(int i) {
   //TODO: implementar
   while(S[i] < esquerdo(i) || S[i] < direito(i)) {
-
+    if(esquerdo(i) < direito(i)){
+      troca(i, direito(i));
+    }
+    else{
+      troca(i, esquerdo(i));
+    }
   }
-
 }
 
 void Heap::sobe(int i) {
@@ -222,18 +226,29 @@ int Heap::consulta_maxima() {
   return S[0];
 }
 
-}
-
-void Heap::altera_prioridade(int i, int p) {
-  //TODO: implementar
-
-}
 int Heap::extrai_maxima() {
   //TODO: implementar
+  int max;
+  int size = S.size();
 
+  if(size > 0){
+    max = S[0];
+    S[0] = S[size - 1];
+    Heap::desce(0);
+    return max;
+  }
+  else{
+    return INT_MIN;
+  }
 }
 
 void Heap::altera_prioridade(int i, int p) {
   //TODO: implementar
-
+  if(p < S[i]){
+    printf("Erro!!!");
+  }
+  else{
+    S[i] = p;
+    Heap::sobe(i);
+  }
 }
