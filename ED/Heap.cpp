@@ -41,12 +41,10 @@ int main(void)
   printf("h:\n");
   h.escreve();
 
-  int max = h.consulta_maxima();
-  printf("%d\n", max);
-  h.extrai_maxima();
-  h.escreve();
-
-  exit(0);
+  //int max = h.consulta_maxima();
+  //printf("%d\n", max);
+  //h.extrai_maxima();
+  //h.escreve();
 
   int v[] = {1,2,3,4,5};
   
@@ -54,6 +52,8 @@ int main(void)
   h2.insere(15);
   printf("h2:\n");
   h2.escreve();
+
+  //exit(0);
 
   Heap h3(h2); // construtor de cópia padrão
   h2.insere(30);
@@ -206,15 +206,14 @@ void Heap::troca(int i, int j) {
 
 void Heap::desce(int i) {
   //TODO: implementar
-  i = 3;
- printf("%d\n", direito(i));
-  while(S[i] < esquerdo(i) || S[i] < direito(i)) {
-    printf("......\n");
-    if(esquerdo(i) <= direito(i)){
+  while(S[i] < S[esquerdo(i)] || S[i] < S[direito(i)]) {
+    if(S[esquerdo(i)] <= S[direito(i)]) {
       troca(i, direito(i));
+      i = direito(i);
     }
     else{
       troca(i, esquerdo(i));
+      i = esquerdo(i);
     }
   }
 }
