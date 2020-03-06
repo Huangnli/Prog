@@ -40,8 +40,12 @@ int main(void)
     h.insere(i);
   printf("h:\n");
   h.escreve();
+
   int max = h.consulta_maxima();
   printf("%d\n", max);
+  h.extrai_maxima();
+  h.escreve();
+
   exit(0);
 
   int v[] = {1,2,3,4,5};
@@ -143,7 +147,10 @@ Heap::Heap() {
 Heap::Heap(int n, int dados[]) :
   S(dados, dados + n) {
   //TODO: implementar (constroi_max_heap)
-
+  int i;
+  for(i = n/2 - 1; i >= 0; i--){
+    desce(i);
+  }
 }
 
 Heap::~Heap() {
@@ -199,8 +206,11 @@ void Heap::troca(int i, int j) {
 
 void Heap::desce(int i) {
   //TODO: implementar
+  i = 3;
+ printf("%d\n", direito(i));
   while(S[i] < esquerdo(i) || S[i] < direito(i)) {
-    if(esquerdo(i) < direito(i)){
+    printf("......\n");
+    if(esquerdo(i) <= direito(i)){
       troca(i, direito(i));
     }
     else{
@@ -234,7 +244,8 @@ int Heap::extrai_maxima() {
   if(size > 0){
     max = S[0];
     S[0] = S[size - 1];
-    Heap::desce(0);
+    desce(0);
+    S.pop_back();
     return max;
   }
   else{
@@ -245,10 +256,11 @@ int Heap::extrai_maxima() {
 void Heap::altera_prioridade(int i, int p) {
   //TODO: implementar
   if(p < S[i]){
-    printf("Erro!!!");
+    S[i] = p;
+    desce(i);
   }
   else{
     S[i] = p;
-    Heap::sobe(i);
+    sobe(i);
   }
 }
