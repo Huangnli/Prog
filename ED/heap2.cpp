@@ -14,7 +14,7 @@ public:
   ~Heap();
   Heap& operator=(const Heap& outro);
   void escreve_niveis();
-  void escreve(const string& prefixo = "", int i = 0);
+  void escreve();  //const string& prefixo = "", int i = 0
   void insere(int p);
   int consulta_maxima();
   int extrai_maxima();
@@ -44,6 +44,8 @@ int main(void)
     h.insere(i);
   printf("h:\n");
   h.escreve();
+
+  exit(0);
 
   h.extrai_maxima();
   h.altera_prioridade(0, -3);
@@ -87,20 +89,24 @@ int main(void)
 }
 
 Heap::Heap() {
+  S = new int [TAMANHO_INICIAL];
+  n = 1;
+  capacidade = TAMANHO_INICIAL;
 }
 
-Heap::Heap(int n, int dados[]) :
-  S(dados, dados + n) {
+Heap::Heap(const int n, const int dados[]) {
   //TODO: implementar (constroi_max_heap)
-  int i;
-  for(i = n/2 - 1; i >= 0; i--){
+  for(int i = 0; i < n; i++){
+     S[i] = dados[i];
+  }
+  for(int i = n/2 - 1; i >= 0; i--){
     desce(i);
   }
 }
 
 Heap::~Heap() {
 }
-
+/*
 void Heap::escreve_niveis() {
   int escritos = 0, fim_nivel = 1;
 
@@ -117,9 +123,9 @@ void Heap::escreve_niveis() {
 }
 
 void Heap::escreve(const string& prefixo, int i) {
-  if (i < (int) S.size()) {
+  if (i < (int) n ){
     bool ehEsquerdo = i % 2 != 0;
-    bool temIrmao = i < (int) S.size()-1;
+    bool temIrmao = i < (int) n-1;
     
     printf(prefixo.c_str());
     printf(ehEsquerdo and temIrmao ? "├──" : "└──" );
@@ -130,7 +136,11 @@ void Heap::escreve(const string& prefixo, int i) {
     escreve(prefixo + (ehEsquerdo ? "│   " : "    "), direito(i));
   }
 }
-
+*/
+void Heap::escreve(){
+  for (int i = 0; i <10; i++)
+    printf("%d\n", S[i]);
+}
 int Heap::pai(int i) {
   return (i - 1) / 2;
 }
@@ -173,19 +183,19 @@ void Heap::sobe(int i) {
 void Heap::insere(int p) {
   //S.push_back(p);
   //sobe(S.size()-1);
-  if(n = capacidade){
-      capacidade = n * 2;
-      int novo[capacidade];
-      for(int i = 0; i < n; i++){
-          novo[i] = S[i];
-      }
-      delete[] S;
-      *S = *novo;
-      S[n] = p;
+  printf("%d %d %d\n", p, n, capacidade);
+  if(n == capacidade){
+    int *novo;
+    capacidade = n * 2;
+    novo = new int [capacidade];
+    for(int i = 0; i < n; i++){
+      novo[i] = S[i];
+    }
+    delete[] S;
+    S = novo;
   }
-  else{
-      S[n-1] = p;
-  }
+  S[n-1] = p;
+  n++;
 }
 
 int Heap::consulta_maxima() {
@@ -196,13 +206,11 @@ int Heap::consulta_maxima() {
 int Heap::extrai_maxima() {
   //TODO: implementar
   int max;
-  int size = S.size();
-
-  if(size > 0){
+  if(n > 0){
     max = S[0];
-    S[0] = S[size - 1];
+    S[0] = S[n - 1];
     desce(0);
-    S.pop_back();
+   // S.pop_back();
     return max;
   }
   else{
