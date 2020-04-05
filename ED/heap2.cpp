@@ -14,7 +14,7 @@ public:
   ~Heap();
   Heap& operator=(const Heap& outro);
   void escreve_niveis();
-  void escreve();  //const string& prefixo = "", int i = 0
+  void escreve(const string& prefixo = "", int i = 0);  //const string& prefixo = "", int i = 0
   void insere(int p);
   int consulta_maxima();
   int extrai_maxima();
@@ -44,8 +44,6 @@ int main(void)
     h.insere(i);
   printf("h:\n");
   h.escreve();
-
-  exit(0);
 
   h.extrai_maxima();
   h.altera_prioridade(0, -3);
@@ -90,12 +88,15 @@ int main(void)
 
 Heap::Heap() {
   S = new int [TAMANHO_INICIAL];
-  n = 1;
+  n = 0;
   capacidade = TAMANHO_INICIAL;
 }
 
 Heap::Heap(const int n, const int dados[]) {
   //TODO: implementar (constroi_max_heap)
+  S = new int[n];
+  this->n = n;
+  capacidade = n;
   for(int i = 0; i < n; i++){
      S[i] = dados[i];
   }
@@ -104,15 +105,33 @@ Heap::Heap(const int n, const int dados[]) {
   }
 }
 
+Heap::Heap(const Heap& outro){
+  n = outro.n;
+  capacidade = outro.capacidade;
+  S = new int [capacidade];
+  for(int i = 0; i < n; i++)
+     S[i] = outro.S[i];
+}
+
 Heap::~Heap() {
 }
-/*
+
+Heap& Heap::operator=(const Heap& outro){
+  n = outro.n;
+  capacidade = outro.capacidade;
+  S = new int [capacidade];
+  for(int i = 0; i < n; i++)
+    S[i] = outro.S[i];
+  delete[] outro.S;
+  return *this;
+}
+
 void Heap::escreve_niveis() {
   int escritos = 0, fim_nivel = 1;
 
-  for(auto const& elemento: S) {
+  for(int i = 0; i < n; i++) {
   // Equivalente a for (unsigned i = 0; i < S.size(); i++) { printf("%d ", S[i]);
-    printf("%d ", elemento);
+    printf("%d ", S[i]);
     if (++escritos == fim_nivel) {
       putchar('\n');
       fim_nivel *= 2;
@@ -123,9 +142,9 @@ void Heap::escreve_niveis() {
 }
 
 void Heap::escreve(const string& prefixo, int i) {
-  if (i < (int) n ){
+  if (i < n) {
     bool ehEsquerdo = i % 2 != 0;
-    bool temIrmao = i < (int) n-1;
+    bool temIrmao = i < n-1;
     
     printf(prefixo.c_str());
     printf(ehEsquerdo and temIrmao ? "├──" : "└──" );
@@ -136,11 +155,7 @@ void Heap::escreve(const string& prefixo, int i) {
     escreve(prefixo + (ehEsquerdo ? "│   " : "    "), direito(i));
   }
 }
-*/
-void Heap::escreve(){
-  for (int i = 0; i <10; i++)
-    printf("%d\n", S[i]);
-}
+
 int Heap::pai(int i) {
   return (i - 1) / 2;
 }
@@ -160,16 +175,18 @@ void Heap::troca(int i, int j) {
 }
 
 void Heap::desce(int i) {
-  //TODO: implementar
-  while(S[i] < S[esquerdo(i)] || S[i] < S[direito(i)]) {
-    if(S[esquerdo(i)] <= S[direito(i)]) {
-      troca(i, direito(i));
-      i = direito(i);
-    }
-    else{
-      troca(i, esquerdo(i));
-      i = esquerdo(i);
-    }
+  int e, d, maior;
+  e = esquerdo(i);
+  d = direito(i);
+  if (e < n && S[e] > S[i])
+    maior = e;
+  else
+    maior = i;
+  if (d < n && S[d] > S[maior])
+    maior = d;
+  if (maior != i) {
+  troca(i, maior);
+  desce(maior);
   }
 }
 
@@ -183,8 +200,9 @@ void Heap::sobe(int i) {
 void Heap::insere(int p) {
   //S.push_back(p);
   //sobe(S.size()-1);
-  printf("%d %d %d\n", p, n, capacidade);
-  if(n == capacidade){
+  //printf("%d %d %d\n", p, n, capacidade);
+  n++;
+  if(n >= capacidade){
     int *novo;
     capacidade = n * 2;
     novo = new int [capacidade];
@@ -195,22 +213,21 @@ void Heap::insere(int p) {
     S = novo;
   }
   S[n-1] = p;
-  n++;
+  sobe(n-1);
 }
 
 int Heap::consulta_maxima() {
-  //TODO: implementar
   return S[0];
 }
 
 int Heap::extrai_maxima() {
-  //TODO: implementar
   int max;
   if(n > 0){
     max = S[0];
     S[0] = S[n - 1];
     desce(0);
-   // S.pop_back();
+    // S.pop_back();
+    n--;
     return max;
   }
   else{
@@ -219,7 +236,6 @@ int Heap::extrai_maxima() {
 }
 
 void Heap::altera_prioridade(int i, int p) {
-  //TODO: implementar
   if(p < S[i]){
     S[i] = p;
     desce(i);
@@ -229,4 +245,3 @@ void Heap::altera_prioridade(int i, int p) {
     sobe(i);
   }
 }
-
