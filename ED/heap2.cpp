@@ -114,15 +114,16 @@ Heap::Heap(const Heap& outro){
 }
 
 Heap::~Heap() {
+  delete[] S;
 }
 
 Heap& Heap::operator=(const Heap& outro){
   n = outro.n;
   capacidade = outro.capacidade;
+  delete[] S;
   S = new int [capacidade];
   for(int i = 0; i < n; i++)
     S[i] = outro.S[i];
-  delete[] outro.S;
   return *this;
 }
 
