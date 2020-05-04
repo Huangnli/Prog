@@ -503,8 +503,8 @@ void AVL::rotacao_dir(No *p) {
     raiz = u;
   }
   u->pai = p->pai;
-  if(p->pai != NULL){
-    if(p->eh_direito()){
+  if(p->pai != NULL){  //verificar se pai do p eh nulo e se p eh direito ou esquerdo 
+    if(p->eh_direito()){    //para fazer com q o pai do p receba o endereco do u
       p->pai->dir = u;
     }
     else{
@@ -514,7 +514,7 @@ void AVL::rotacao_dir(No *p) {
   p->pai = u;
   p->esq = u->dir;
   if(u->dir != NULL){
-    u->dir->pai = p;
+    u->dir->pai = p;  
   }
   u->dir = p;
   
@@ -532,8 +532,8 @@ void AVL::rotacao_esq(No *p) {
     raiz = u;
   }
   u->pai = p->pai;
-  if(p->pai != NULL){ 
-    if(p->eh_direito()){
+  if(p->pai != NULL){   //verificar se pai do p eh nulo e se p eh direito ou esquerdo 
+    if(p->eh_direito()){   //para fazer com q o pai do p receba o endereco do u
       p->pai->dir = u;
     }
     else{
