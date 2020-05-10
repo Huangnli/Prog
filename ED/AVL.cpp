@@ -92,7 +92,7 @@ int main(void)
     T.insere(x); // Inicialmente, sem balanceamento
   T.escreve();
 
-  return 0; // TODO: implemente as rotações esquerda e direita e remova esta linha
+  //return 0; // TODO: implemente as rotações esquerda e direita e remova esta linha
 
   /*printf("\n##TESTE DE ROTAÇÕES##\n\n");
   No *raiz = T.get_raiz();
@@ -108,7 +108,7 @@ int main(void)
   // a main para verificar se o balanceamento está correto
   
 
-  return 0; // TODO: implemente a remoção e remova esta linha
+  //return 0; // TODO: implemente a remoção e remova esta linha
 
   printf("\n##TESTE DE REMOÇÃO##\n\n");
   printf("T:\n");
@@ -429,14 +429,18 @@ void AVL::remove(No *z) {
         transplante(y, y->dir); 
         y->dir = z->dir;
         y->dir->pai = y;
+       // p = y;
+        //printf("a%d", p->chave);
       }
       
       transplante(z, y); // (a)
       y->esq = z->esq;
       y->esq->pai = y;
-
-      if (p == NULL) // se fomos direto pro caso 3(a) sem entrar no caso 3(b)
-        ;//p = ???; // p pode receber nulo?
+      
+      if (p == NULL){// se fomos direto pro caso 3(a) sem entrar no caso 3(b)
+         p = y;//p = ???; // p pode receber nulo?
+       // printf("b%d", p->chave);
+      } 
     }
   }
 
@@ -445,6 +449,25 @@ void AVL::remove(No *z) {
   // alturas/fatores de balanceamento da inserção. Consulte nas notas
   // de aula as diferenças. Além disso:
   //
+ if (z->eh_raiz()){
+    if(p != NULL){
+      z = p;
+      if (z->eh_raiz()){
+        z = ajusta_balanceamento(z);
+        return;
+      }
+    do { // o laço inicia subindo imediatamente para o pai do nó inserido
+      z = z->pai;
+      z = ajusta_balanceamento(z);
+      } while (!z->eh_raiz() and z->bal() != 0);
+    }
+    return;
+ }
+   
+  do { // o laço inicia subindo imediatamente para o pai do nó inserido
+    z = z->pai;
+    z = ajusta_balanceamento(z);
+  } while (!z->eh_raiz() and z->bal() != 0);
   // * Quando a árvore necessitar alguma rotação do caso 1 (z->bal() == 2)
   //   - Se z->esq->bal() for zero, escolher o caso 1.1 para rotação
   // * Siga a mesma lógica para o caso 2 (z->bal() == -2) e o caso 2.1
