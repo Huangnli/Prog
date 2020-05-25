@@ -558,9 +558,9 @@ void BArvore::limpa(No *x) {
     return;
   }
   if (x != NULL){
-    for (int i = 0; i <= x->n; i++) {
+    for (int i = 0; i <= x->n; i++) 
       limpa(x->filho[i]);
-    }
+
     delete x;
   }
 }
