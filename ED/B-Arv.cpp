@@ -113,7 +113,7 @@ int main(void)
   printf("\n\nElementos ordenados: ");
   T.escreve_ordenado();
 
-  return 0; // TODO: remova após implementar a busca, mínimo e máximo
+  //return 0; // TODO: remova após implementar a busca, mínimo e máximo
   
   pair<No *, int> min = T.minimo();
   pair<No *, int> max = T.maximo();
@@ -133,7 +133,7 @@ int main(void)
   pair<No *, int> suc = T.sucessor(raiz, 0);
   printf("Sucessor do 1o elemento da raiz: %d\n", suc.first->get_chave(suc.second));
 
-  return 0; // TODO: remova após testar as funções acima, não é
+  //return 0; // TODO: remova após testar as funções acima, não é
             // necessário implementar nenhuma função adicional para
             // que o construtor de cópia e a remoção funcionem (MAS
             // LEIA O CÓDIGO DA CÓPIA E DA REMOÇÃO!!!)
@@ -153,7 +153,7 @@ int main(void)
     T.escreve();
   }
 
-  return 0; // TODO: remova após implementar a função limpa
+  //return 0; // TODO: remova após implementar a função limpa
   
   printf("\n##TESTE DE ATRIBUIÇÃO##\n\n");
   T = T2;
@@ -162,8 +162,6 @@ int main(void)
 
   return 0;
 }
-
-
 
 //*******************************************
 //*** DECLARAÇÃO DA CLASSE BArvorePrinter ***
@@ -327,8 +325,19 @@ pair<No *, int> BArvore::busca(No *x, int k) {
   // TODO: Implemente o algoritmo de busca. Ele deve devolver um
   // pair<No *, int>(x, i); com o nó x e a posição i onde a chave k se
   // encontra, ou pair<No *, int>(NULL, -1); se não encontrar.
-
-  
+  int i = 1;
+  while(i <= x->n && k > x->chave[i-1]){
+    i++;
+  }
+  if(i <= x->n && k == x->chave[i-1]){
+    return pair<No *, int>(x, i-1);
+  }
+  else if(x->eh_folha()){
+    return pair<No *, int>(NULL, -1);
+  }
+  else{
+    return busca(x->filho[i-1], k);
+  }
 }
 
 pair<No *, int> BArvore::minimo() {
@@ -342,7 +351,10 @@ pair<No *, int> BArvore::minimo(No *x) {
   // onde está o mínimo (será uma folha) e a posição da chave mínima
   // neste nó.
 
-  
+  while(!(x->eh_folha())){
+    x = x->filho[0];
+  }
+  return pair<No *, int>(x, 0);
 }
 
 pair<No *, int> BArvore::maximo() {
@@ -355,7 +367,10 @@ pair<No *, int> BArvore::maximo(No *x) {
   // A função deve devolver um pair<No *, int>(nó, posição) com o nó
   // onde está o máximo (será uma folha) e a posição da chave máxima
   // neste nó.
-
+  while(!(x->eh_folha())){
+    x = x->filho[x->n];
+  }
+  return pair<No *, int>(x, (x->n)-1);
   
 }
 
