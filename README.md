@@ -1,2 +1,2 @@
-# Prog
+# Programação
 listas, trabalhos e provas
